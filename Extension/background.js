@@ -7,7 +7,6 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
     ) {
         const queryParams = new URL(tab.url).searchParams;
         const videoId = queryParams.get("v");
-        console.log("Detected videoID:", videoId);
 
         chrome.storage.local.set({ currentVideoId: videoId });
     }
