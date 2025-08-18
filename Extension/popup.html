@@ -8,17 +8,16 @@
 </head>
 <body>
     <!-- <div class="main-container">hi</div> -->
-     <div style="width:400px; height:550px; display:flex; flex-direction:column;">
-  <div id="chatArea" style="flex:1; overflow-y:auto; padding:10px; border:1px solid #ccc; border-radius:8px;">
-    <!-- Chat messages appear here -->
+     <div id="main-container">
+  <div id="chatArea">
+   
   </div>
 
-  <div style="display:flex; margin-top:10px;">
-    <input id="queryInput" type="text" placeholder="Ask about this video..."
-           style="flex:1; padding:8px; border-radius:6px; border:1px solid #ccc;">
-    <button id="askBtn" style="margin-left:5px; padding:8px 12px;">Send</button>
+  <div id="queryArea">
+    <input id="queryInput" type="text" placeholder="Ask about this video...">
+    <button id="askBtn">Send</button>
   </div>
 </div>
-
+<script src="popup.js"></script>
 </body>
 </html>
