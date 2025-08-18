@@ -1,0 +1,20 @@
+{
+    "name":"YT Chatbot",
+    "version":"0.1.0",
+    "description":"Chatbot that can give you info of given running video",
+    "permissions":["activeTab","storage","tabs"],
+    "host_permissions":["https://* youtube.com/*"],
+    "background":{
+        "service_worker":"background.js"
+    },
+    "action":{
+        "default_icon":{
+            "16":"ext-icon.png",
+            "24":"ext-icon.png",
+            "32":"ext-icon.png"
+        },
+        "default_title":"YT-Chatbot",
+        "default_popup":"popup.html"
+    },
+    "manifest_version":3
+}
