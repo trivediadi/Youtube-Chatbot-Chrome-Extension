@@ -8,11 +8,10 @@ function addMessage(text, sender) {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-    // Show welcome message from chatbot
     addMessage("Hi, I am your helpful assistant 🤖", "bot");
 
     const askBtn = document.getElementById("askBtn");
-    askBtn.addEventListener("click", () => {
+    askBtn.addEventListener("click", async () => {
         const queryInput = document.getElementById("queryInput");
         const query = queryInput.value.trim();
 
@@ -22,15 +21,26 @@ document.addEventListener("DOMContentLoaded", () => {
         addMessage(query, "user");
         queryInput.value = "";
 
-        // For now, simulate bot reply
-        let botReply = "This is a dummy reply!";
-        if (query.toLowerCase() === "hi") {
-            botReply = "Hello! How can I help you today?";
-        }
+        // Get videoId from storage
+        chrome.storage.local.get("currentVideoId", async (data) => {
+            const videoId = data.currentVideoId || null;
 
-        // Show bot reply
-        addMessage(botReply, "bot");
+            try {
+                const res = await fetch("http://127.0.0.1:8000/ask", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ videoId, query })
+                });
 
+                const json = await res.json();
+                const botReply = json.reply || "No reply from server 🤔";
+
+            
+                addMessage(botReply, "bot");
+            } catch (err) {
+                addMessage("⚠️ Error connecting to server", "bot");
+                console.error(err);
+            }
+        });
     });
 });
-
