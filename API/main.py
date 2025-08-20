@@ -1,6 +1,6 @@
 from fastapi import FastAPI 
 from fastapi.middleware.cors import CORSMiddleware
-
+from rag_chatbot import get_answer
 from pydantic import BaseModel
 app=FastAPI()
 
@@ -22,6 +22,6 @@ class AskRequest(BaseModel):
     query: str
 
 @app.post("/ask")
-def ask(req: AskRequest):
-    print("Received:", req.dict())
-    return {"reply": f"Got query '{req.query}' for video {req.videoId}"}
+def ask(req: AskRequest):  
+    response = get_answer(req.videoId, req.query)
+    return {"reply": response}
