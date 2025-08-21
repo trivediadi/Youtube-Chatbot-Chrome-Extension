@@ -10,12 +10,15 @@ from dotenv import load_dotenv
 load_dotenv()
 
 TRANSCRIPT_CACHE: Dict[str, str] = {}  
-VECTOR_CACHE: Dict[str, Any] = {}   
+VECTOR_CACHE: Dict[str, Any] = {}  
+CHAT_HISTORY: Dict[str, list] = {}  
+
 def get_answer(video_id:str,query:str)->str:
     if not video_id:
         return "No video ID provided."
     if not query or not query.strip():
         return "Please provide a non-empty question."
+    history = CHAT_HISTORY.get(video_id, [])
     transcript = TRANSCRIPT_CACHE.get(video_id)
     if transcript is None:
         try:
@@ -51,24 +54,30 @@ def get_answer(video_id:str,query:str)->str:
 
     llm=ChatOpenAI(model="gpt-4o-mini",temperature=0.2)
     parser = StrOutputParser()
+    conversation_context = "\n".join([f"User: {q}\nBot: {a}" for q, a in history[-5:]])
 
     prompt = PromptTemplate(
         template="""
     You are a helpful assistant. 
-    Answer only from the provided transcript context. 
+    Use the transcript context and chat history to answer. 
     If the context is insufficient, just say you don't know. 
 
+    Transcript Context:
     {context}
+
+    Chat History:
+    {history}
 
     Question: {question}
     """,
-        input_variables=['context', 'question']
+        input_variables=['context', 'history', 'question']
     )
     def format_docs(retrived_docs):
         context_text="\n\n".join(docs.page_content for docs in retrived_docs)
         return context_text
     parallel_chain=RunnableParallel({
         'context': retriever|RunnableLambda(format_docs),
+        'history': RunnableLambda(lambda _: conversation_context),
         'question':RunnablePassthrough()
     })
     final_chain=parallel_chain|prompt|llm|parser
@@ -77,6 +86,7 @@ def get_answer(video_id:str,query:str)->str:
         answer = final_chain.invoke(query)
     except Exception as e:
         return f"Error generating answer: {e}"
-    
-    return answer or "I don't know."
+    history.append((query,answer))
+    CHAT_HISTORY[video_id]=history
+    return answer or "Please frame your question more properly"
 
