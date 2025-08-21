@@ -24,4 +24,4 @@ class AskRequest(BaseModel):
 @app.post("/ask")
 def ask(req: AskRequest):  
     response = get_answer(req.videoId, req.query)
-    return  {"reply": response}
+    return {"reply": response}
