@@ -5,7 +5,7 @@ from pydantic import BaseModel
 app=FastAPI()
 
 origins = [
-    "chrome-extension://allbhmeghkdidbpolgcfdjpefdkomljn",  # your extension ID
+    "chrome-extension://allbhmeghkdidbpolgcfdjpefdkomljn",  
     "http://127.0.0.1:8000",
     "http://localhost:8000"
 ]
