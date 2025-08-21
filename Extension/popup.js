@@ -96,7 +96,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 thinkingMsg.innerText = botReply; // replace with real answer
             } catch (err) {
                 clearInterval(thinkingInterval);
-                thinkingMsg.innerText = "⚠️ Error connecting to server";
+                thinkingMsg.innerText = " Error connecting to server";
                 console.error(err);
             }
         });
