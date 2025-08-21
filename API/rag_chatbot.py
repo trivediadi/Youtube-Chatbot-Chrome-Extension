@@ -77,6 +77,6 @@ def get_answer(video_id:str,query:str)->str:
         answer = final_chain.invoke(query)
     except Exception as e:
         return f"Error generating answer: {e}"
-
+    
     return answer or "I don't know."
 
